@@ -23,7 +23,7 @@ rt.gROOT.LoadMacro("../C++/setTDRStyle.C")
 from ROOT import setTDRStyle
 setTDRStyle()
 
-globalGoFast = False
+globalGoFast = True
 
 
 selection = "isFromW && nNu == 0"

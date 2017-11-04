@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import ROOT as rt
 import sys
+import ROOT as rt
 
 import PoI #particles of interest
 
@@ -22,11 +22,11 @@ globalGoFast = False
 
 ### nominal mass 80.402999
 
-selection = ""
+selection = "nCh+nNu<20"
 variable = "invM"
-mult3 = rt.TH1F("mult3","M_W = nominal; mass [GeV]; fraction",500, 78, 88)
+mult3 = rt.TH1F("mult3","number of stable particles < 20; mass [GeV]; fraction",500, 78, 88)
 mult3.Sumw2() 
-mult4 = rt.TH1F("mult4","M_W = nominal [MatchBox]; mass [GeV]; fraction",500, 78,88)
+mult4 = rt.TH1F("mult4","number of stable particles < 20; mass [GeV]; fraction",500, 78,88)
 mult4.Sumw2() 
 
 goFast = events3.GetEntries()
@@ -72,9 +72,19 @@ leg1.AddEntry(mult3, "with CR","l")
 leg1.AddEntry(mult4, "without CR","l")
 leg1.Draw("same")
 
+paveText = rt.TPaveText( 0.58, 0.63, 0.79, 0.83,"blNDC")
+paveText.SetBorderSize(0)
+paveText.SetFillColor(0)
+paveText.SetFillStyle(0)
+paveText.SetTextSize(24)
+paveText.SetTextFont(43)
+paveText.SetTextColor(9)
+paveText.AddText("stable particles < 20")
+paveText.Draw("same")
 
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".pdf")
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".png")
+
 
 
 

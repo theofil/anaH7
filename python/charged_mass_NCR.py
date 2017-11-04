@@ -22,11 +22,11 @@ globalGoFast = False
 
 ### nominal mass 80.402999
 
-selection = ""
+selection = "nNu==0"
 variable = "invM"
-mult3 = rt.TH1F("mult3","M_W = nominal; mass [GeV]; fraction",500, 78, 88)
+mult3 = rt.TH1F("mult3","WCR; mass [GeV]; fraction",500, 78, 88)
 mult3.Sumw2() 
-mult4 = rt.TH1F("mult4","M_W = nominal [MatchBox]; mass [GeV]; fraction",500, 78,88)
+mult4 = rt.TH1F("mult4","NCR; mass [GeV]; fraction",500, 78, 88)
 mult4.Sumw2() 
 
 goFast = events3.GetEntries()
@@ -56,11 +56,12 @@ mult3.SetLineColor(rt.kRed)
 rt.gStyle.SetOptTitle(0)
 c1 = rt.TCanvas()
 c1.cd()
-c1.SetLogy()
-mult4.GetYaxis().SetTitleOffset(1.13)
+#c1.SetLogy()
 
+mult4.GetYaxis().SetTitleOffset(1.13)
 mult4.Draw("hist")
 mult3.Draw("hist same")
+
 
 leg1 = rt.TLegend(0.65,0.8,0.93,0.93)
 leg1.SetTextSize(24)
@@ -73,8 +74,18 @@ leg1.AddEntry(mult4, "without CR","l")
 leg1.Draw("same")
 
 
+paveText = rt.TPaveText(0.66,0.66,0.87,0.87,"blNDC")
+paveText.SetBorderSize(0)
+paveText.SetFillColor(0)
+paveText.SetFillStyle(0)
+paveText.SetTextSize(24)
+paveText.SetTextFont(43)
+paveText.SetTextColor(rt.kBlue)
+paveText.AddText("W^{+} #rightarrow no-neutrals")
+paveText.Draw("same")
+
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".pdf")
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".png")
 
-
-
+print "rate for NCR = ", mult4.GetEntries()
+print "rate for WCR = ", mult3.GetEntries()

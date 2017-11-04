@@ -23,10 +23,10 @@ globalGoFast = False
 ### nominal mass 80.402999
 
 selection = ""
-variable = "invM"
-mult3 = rt.TH1F("mult3","M_W = nominal; mass [GeV]; fraction",500, 78, 88)
+variable = "nCh+nNu"
+mult3 = rt.TH1F("mult3","WCR; stable particles; fraction",140, 0, 140)
 mult3.Sumw2() 
-mult4 = rt.TH1F("mult4","M_W = nominal [MatchBox]; mass [GeV]; fraction",500, 78,88)
+mult4 = rt.TH1F("mult4","NCR; stable particles; fraction",140, 0, 140)
 mult4.Sumw2() 
 
 goFast = events3.GetEntries()
@@ -57,10 +57,11 @@ rt.gStyle.SetOptTitle(0)
 c1 = rt.TCanvas()
 c1.cd()
 c1.SetLogy()
-mult4.GetYaxis().SetTitleOffset(1.13)
 
+mult4.GetYaxis().SetTitleOffset(1.13)
 mult4.Draw("hist")
 mult3.Draw("hist same")
+
 
 leg1 = rt.TLegend(0.65,0.8,0.93,0.93)
 leg1.SetTextSize(24)
@@ -72,9 +73,6 @@ leg1.AddEntry(mult3, "with CR","l")
 leg1.AddEntry(mult4, "without CR","l")
 leg1.Draw("same")
 
-
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".pdf")
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".png")
-
-
 
