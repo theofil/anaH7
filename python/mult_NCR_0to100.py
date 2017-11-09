@@ -7,8 +7,10 @@ import PoI #particles of interest
 # W40incl1M	W60incl1M	Winc1M		WinclMatchBox
 
 # open the file, read the TTree
+fp3 = rt.TFile.Open("../files/Wplus_qqbar_MatchBox_output.root")
+events3 = fp3.Get("events")
 
-fp4 = rt.TFile.Open("../files/LEP_output.root")
+fp4 = rt.TFile.Open("../files/Wplus_qqbar_MatchBox_NCR_output.root")
 events4 = fp4.Get("events")
 
 # set TDR style
@@ -22,9 +24,18 @@ globalGoFast = False
 
 selection = ""
 variable = "nCh+nNu"
-mult4 = rt.TH1F("mult4","; stable particles; fraction",140, 0,140)
+mult3 = rt.TH1F("mult3","WCR; stable particles; fraction",100, 0, 100)
+mult3.Sumw2() 
+mult4 = rt.TH1F("mult4","NCR; stable particles; fraction",100, 0, 100)
 mult4.Sumw2() 
 
+goFast = events3.GetEntries()
+print "TTree has", goFast, "entries"
+if globalGoFast: goFast = 10000
+print "analyzing", goFast, "events3"
+events3.Draw(variable+">>mult3",selection,"goff", goFast)
+mult3.Scale(1.0/goFast)
+mult3.SetLineWidth(2)
 
 goFast = events4.GetEntries()
 print "TTree has", goFast, "entries"
@@ -37,27 +48,31 @@ mult4.SetLineWidth(2)
 mult4.SetLineStyle(1)
 mult4.SetLineColor(rt.kBlack)
 mult4.SetMarkerColor(rt.kBlack)
+mult3.SetLineWidth(2)
+mult3.SetLineStyle(2)
+mult3.SetLineColor(rt.kRed)
 
 ### plot
 rt.gStyle.SetOptTitle(0)
 c1 = rt.TCanvas()
 c1.cd()
 c1.SetLogy()
+
 mult4.GetYaxis().SetTitleOffset(1.13)
 mult4.Draw("hist")
+mult3.Draw("hist same")
 
-paveText = rt.TPaveText( 0.62, 0.78, 0.82, 0.98,"blNDC")
-paveText.SetBorderSize(0)
-paveText.SetFillColor(0)
-paveText.SetFillStyle(0)
-paveText.SetTextSize(24)
-paveText.SetTextFont(43)
-paveText.SetTextColor(9)
-paveText.AddText("e^{+}e^{-} #rightarrow Z^{0}/#gamma #rightarrow q#bar{q}")
-paveText.Draw("same")
+
+leg1 = rt.TLegend(0.65,0.8,0.93,0.93)
+leg1.SetTextSize(24)
+leg1.SetTextFont(43)
+leg1.SetFillColor(rt.kWhite)
+leg1.SetFillStyle(0)
+leg1.SetBorderSize(0)
+leg1.AddEntry(mult3, "with CR","l")
+leg1.AddEntry(mult4, "without CR","l")
+leg1.Draw("same")
 
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".pdf")
 c1.SaveAs("../plots/"+sys.argv[0][0:-3]+".png")
-
-
 
